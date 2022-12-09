@@ -6,7 +6,7 @@
 /*   By: eslamber <eslamber@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 11:44:57 by eslamber          #+#    #+#             */
-/*   Updated: 2022/12/08 14:31:32 by eslamber         ###   ########.fr       */
+/*   Updated: 2022/12/09 16:22:58 by eslamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,17 @@
 # endif
 
 // Return first occurence of little
-char	*ft_strnstr(const char *big, const char *little, size_t n);
+int		ft_in(char src, char *test, size_t n);
 
 // Return new string what is src concatenated to dest
-char	*ft_strjoin(char *dest, char *src);
+char	*ft_strdup(const char *dest);
 
-// Return the first line, the second line become the first line
+// Return length of s
+size_t	ft_strlen(const char *s);
+
+// Concatenate src to end of dest
+size_t	ft_strlcat(char *dest, const char *src, size_t n);
+
+// Return the first line of file, caracteres after first line are kept
 char	*get_next_line(int fd);
 #endif

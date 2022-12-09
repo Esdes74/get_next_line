@@ -6,7 +6,7 @@
 /*   By: eslamber <eslamber@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 13:17:30 by eslamber          #+#    #+#             */
-/*   Updated: 2022/12/08 13:58:46 by eslamber         ###   ########.fr       */
+/*   Updated: 2022/12/09 16:21:44 by eslamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static size_t	max(size_t x, size_t y)
 	return (y);
 }
 
-static size_t	ft_strlen(const char *s)
+size_t	ft_strlen(const char *s)
 {
 	size_t	len;
 
@@ -29,7 +29,7 @@ static size_t	ft_strlen(const char *s)
 	return (len);
 }
 
-static size_t	ft_strlcat(char *dest, const char *src, size_t n)
+size_t	ft_strlcat(char *dest, const char *src, size_t n)
 {
 	size_t	len_d;
 	size_t	len;
@@ -57,44 +57,39 @@ static size_t	ft_strlcat(char *dest, const char *src, size_t n)
 	return (max(len_d, save_len_d + ft_strlen(src)));
 }
 
-char	*ft_strjoin(char *dest, char *src)
+char	*ft_strdup(const char *src)
 {
-	size_t	len_tot;
 	char	*new;
+	size_t	len;
+	size_t	len_cpy;
+	size_t	n;
 
-	len_tot = ft_strlen(dest) + ft_strlen(src) + 1;
-	new = (char *) malloc(sizeof(char) * len_tot);
+	len = ft_strlen(src) + 1;
+	new = (char *) malloc(sizeof(char) * len);
 	if (new == 0)
 		return (0);
-	new[0] = '\0';
-	ft_strlcat(new, dest, len_tot);
-	ft_strlcat(new, src, len_tot);
-	free(dest);
+	len_cpy = 0;
+	n = ft_strlen(src) + 1;
+	while (len_cpy < n - 1 && src[len_cpy] != '\0' && n != 0)
+	{
+		new[len_cpy] = src[len_cpy];
+		len_cpy++;
+	}
+	if (n != 0)
+		new[len_cpy] = '\0';
 	return (new);
 }
 
-char	*ft_strnstr(const char *big, const char *little, size_t n)
+int	ft_in(char src, char *test, size_t n)
 {
-	size_t	len;
-	size_t	len_test;
-	size_t	i;
+	size_t	ind;
 
-	if (!little[0])
-		return ((char *)big);
-	len = 0;
-	len_test = 0;
-	while (big[len] != '\0' && len < n && n != 0)
+	ind = 0;
+	while (test[ind] != '\0' && ind < n)
 	{
-		i = len;
-		len_test = 0;
-		while (big[i] == little[len_test] && big[i] != '\0' && i < n)
-		{
-			i++;
-			len_test++;
-		}
-		if (little[len_test] == '\0')
-			return ((char *) big + len);
-		len++;
+		if (test[ind] == src)
+			return (1);
+		ind++;
 	}
 	return (0);
 }
