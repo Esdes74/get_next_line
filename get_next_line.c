@@ -87,6 +87,10 @@ static char	*read_line(char *line, char *buff, ssize_t ret, int fd)
 		if (ret <= 0 && !buff[0])
 			return (free(line), buff[0] = 0, NULL);
 	}
+	if (ft_in('\n', buff, BUFFER_SIZE) == 1 || buff[0] == '\n')
+		line = ft_strjoin(line, buff);
+	if (line == 0)
+		return (free(line), NULL);
 	return (line);
 }
 
@@ -95,19 +99,16 @@ char	*get_next_line(int fd)
 	static char	buff[BUFFER_SIZE + 1];
 	char		*line;
 	ssize_t		read_ret;
-	// int			flag;
 
 	line = malloc(sizeof(char));
 	if (!line)
 		return (NULL);
 	buff[BUFFER_SIZE] = 0;
 	line[0] = 0;
-	// flag = 0;
 	if (buff[0] != 0)
 	{
 		line = ft_strjoin(line, buff);
 		treat(line, buff);
-		// flag = 1;
 	}
 	read_ret = read(fd, buff, BUFFER_SIZE);
 	if (read_ret <= 0 && !buff[0])
@@ -115,9 +116,6 @@ char	*get_next_line(int fd)
 	line = read_line(line, buff, read_ret, fd);
 	if (line == NULL)
 		return (NULL);
-	if (ft_in('\n', buff, BUFFER_SIZE) == 1 && line[0] == '\0')
-		line = ft_strjoin(line, buff);
-	// if (flag == 0)
 	treat(line, buff);
 	return (line);
 }
@@ -128,7 +126,10 @@ char	*get_next_line(int fd)
 // 	int	fd;
 // 	int	test;
 
-// 	fd = open("/Users/eslamber/francinette/temp/get_next_line/fsoares/multiple_nl.txt", O_RDWR);
+// 	fd = open("/Users/eslamber/francinette/temp/get_next_line/fsoares/only_nl.txt", O_RDWR);
+// 	printf("%s", get_next_line(fd));
+// 	printf("%s", get_next_line(fd));
+// 	printf("%s", get_next_line(fd));
 // 	printf("%s", get_next_line(fd));
 // 	printf("%s", get_next_line(fd));
 // 	printf("%s", get_next_line(fd));
