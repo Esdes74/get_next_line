@@ -69,8 +69,6 @@ static void	treat(char *line, char *buff)
 		buff[ind_buff++] = line[ind++];
 	ind = save_ind;
 	line[save_ind] = '\0';
-	// while (line[ind] != '\0')
-	// 	line[ind++] = '\0';
 	while (ind_buff < BUFFER_SIZE)
 		buff[ind_buff++] = '\0';
 }
