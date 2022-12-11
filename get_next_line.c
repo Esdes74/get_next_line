@@ -68,10 +68,12 @@ static void	treat(char *line, char *buff)
 	while (line[ind] != '\0' && ind_buff < BUFFER_SIZE)
 		buff[ind_buff++] = line[ind++];
 	ind = save_ind;
-	while (line[ind] != '\0')
-		line[ind++] = '\0';
-	while (ind_buff < BUFFER_SIZE)
-		buff[ind_buff++] = '\0';
+	line[save_ind] = '\0';
+	// while (line[ind] != '\0')
+	// 	line[ind++] = '\0';
+	buff[ind_buff] = '\0';
+	// while (ind_buff < BUFFER_SIZE)
+	// 	buff[ind_buff++] = '\0';
 }
 
 static char	*read_line(char *line, char *buff, ssize_t ret, int fd)
@@ -94,47 +96,81 @@ static char	*read_line(char *line, char *buff, ssize_t ret, int fd)
 	return (line);
 }
 
+static int	treat_buff(char **line, char *buff)
+{
+	int	flag;
+
+	if (ft_in('\n', buff, BUFFER_SIZE) == 1)
+		flag = 1;
+	else
+		flag = 0;
+	*line = ft_strjoin(*line, buff);
+	treat(*line, buff);
+	return (flag);
+}
+
 char	*get_next_line(int fd)
 {
 	static char	buff[BUFFER_SIZE + 1];
 	char		*line;
 	ssize_t		read_ret;
+	int			flag;
 
 	line = malloc(sizeof(char));
 	if (!line)
 		return (NULL);
 	buff[BUFFER_SIZE] = 0;
 	line[0] = 0;
+	flag = 0;
 	if (buff[0] != 0)
+		flag = treat_buff(&line, buff);
+	if (flag == 0)
 	{
-		line = ft_strjoin(line, buff);
+		read_ret = read(fd, buff, BUFFER_SIZE);
+		if (read_ret <= 0 && !buff[0])
+			return (free(line), buff[0] = 0, NULL);
+		line = read_line(line, buff, read_ret, fd);
+		if (line == NULL)
+			return (NULL);
 		treat(line, buff);
 	}
-	read_ret = read(fd, buff, BUFFER_SIZE);
-	if (read_ret <= 0 && !buff[0])
-		return (free(line), buff[0] = 0, NULL);
-	line = read_line(line, buff, read_ret, fd);
-	if (line == NULL)
-		return (NULL);
-	treat(line, buff);
 	return (line);
 }
 
-// int	main(int argc, char **argv)
-// {
-// 	(void) argv;
-// 	int	fd;
-// 	int	test;
+int	main(int argc, char **argv)
+{
+	(void) argv;
+	int	fd;
+	int	test;
 
-// 	fd = open("/Users/eslamber/francinette/temp/get_next_line/fsoares/only_nl.txt", O_RDWR);
-// 	printf("%s", get_next_line(fd));
-// 	printf("%s", get_next_line(fd));
-// 	printf("%s", get_next_line(fd));
-// 	printf("%s", get_next_line(fd));
-// 	printf("%s", get_next_line(fd));
-// 	printf("%s", get_next_line(fd));
-// 	printf("%s", get_next_line(fd));
-// 	printf("%s", get_next_line(fd));
-// 	close(fd);
-// 	return (0);
-// }
+	fd = open("/Users/eslamber/francinette/temp/get_next_line/fsoares/variable_nls.txt", O_RDWR);
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	close(fd);
+	return (0);
+}
