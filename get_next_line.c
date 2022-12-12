@@ -14,23 +14,6 @@
 #include <stdio.h>
 #include <fcntl.h>
 
-// static void	is_end_line(char *line, char *buff)
-// {
-// 	char	*end;
-
-// 	end = ft_strnstr(buff, "\n", BUFFER_SIZE);
-// 	if (end == 0)
-// 	{
-// 		line = ft_strjoin(line, buff);
-// 	}
-// 	else
-// 	{
-// 		end[0] = '\0';
-// 		line = ft_strjoin(line, buff);
-// 		line = ft_strjoin(line, "\n");
-// 	}
-// }
-
 static char	*ft_strjoin(char *dest, char *src)
 {
 	size_t	len_tot;
@@ -45,7 +28,7 @@ static char	*ft_strjoin(char *dest, char *src)
 	len_tot = ft_strlen(dest) + ft_strlen(src) + 1;
 	new = (char *) malloc(sizeof(char) * len_tot);
 	if (new == 0)
-		return (0);
+		return (free(dest), dest = NULL, NULL);
 	new[0] = '\0';
 	ft_strlcat(new, dest, len_tot);
 	ft_strlcat(new, src, len_tot);
@@ -54,11 +37,12 @@ static char	*ft_strjoin(char *dest, char *src)
 	return (new);
 }
 
-static void	treat(char *line, char *buff)
+static char	*treat(char *line, char *buff)
 {
 	size_t	ind;
 	size_t	ind_buff;
 	size_t	save_ind;
+	char	*new;
 
 	ind = 0;
 	while (line[ind] != '\0')
@@ -70,8 +54,13 @@ static void	treat(char *line, char *buff)
 		buff[ind_buff++] = line[ind++];
 	ind = save_ind;
 	line[save_ind] = '\0';
+	new = ft_strdup(line);
+	if (!new)
+		return (free(line), line = NULL, NULL);
 	while (ind_buff < BUFFER_SIZE)
 		buff[ind_buff++] = '\0';
+	free(line);
+	return (new);
 }
 
 static char	*read_line(char *line, char *buff, ssize_t ret, int fd)
@@ -91,11 +80,9 @@ static char	*read_line(char *line, char *buff, ssize_t ret, int fd)
 		if (ret <= 0 && !buff[0])
 			return (free(line), buff[0] = 0, NULL);
 	}
+	buff[ret] = 0;
 	if (ft_in('\n', buff, BUFFER_SIZE) == 1 || buff[0] == '\n')
-	{
-		buff[ret] = 0;
 		line = ft_strjoin(line, buff);
-	}
 	if (line == 0)
 		return (free(line), NULL);
 	return (line);
@@ -110,7 +97,11 @@ static int	treat_buff(char **line, char *buff)
 	else
 		flag = 0;
 	*line = ft_strjoin(*line, buff);
-	treat(*line, buff);
+	if (!(*line))
+		return (-1);
+	*line = treat(*line, buff);
+	if (!(*line))
+		return (-1);
 	return (flag);
 }
 
@@ -135,45 +126,7 @@ char	*get_next_line(int fd)
 		line = read_line(line, buff, read_ret, fd);
 		if (line == NULL)
 			return (NULL);
-		treat(line, buff);
+		line = treat(line, buff);
 	}
 	return (line);
 }
-
-// int	mVain(int argc, char **argv)
-// {
-// 	(void) argv;
-// 	int	fd;
-// 	int	test;
-
-// 	fd = open("/Users/eslamber/francinette/temp/get_next_line/gnlTester/files/43_with_nl", O_RDWR);
-// 	printf("%s", get_next_line(fd));
-// 	printf("%s", get_next_line(fd));
-// 	printf("%s", get_next_line(fd));
-// 	// printf("%s", get_next_line(fd));
-// 	// printf("%s", get_next_line(fd));
-// 	// printf("%s", get_next_line(fd));
-// 	// printf("%s", get_next_line(fd));
-// 	// printf("%s", get_next_line(fd));
-// 	// printf("%s", get_next_line(fd));
-// 	// printf("%s", get_next_line(fd));
-// 	// printf("%s", get_next_line(fd));
-// 	// printf("%s", get_next_line(fd));
-// 	// printf("%s", get_next_line(fd));
-// 	// printf("%s", get_next_line(fd));
-// 	// printf("%s", get_next_line(fd));
-// 	// printf("%s", get_next_line(fd));
-// 	// printf("%s", get_next_line(fd));
-// 	// printf("%s", get_next_line(fd));
-// 	// printf("%s", get_next_line(fd));
-// 	// printf("%s", get_next_line(fd));
-// 	// printf("%s", get_next_line(fd));
-// 	// printf("%s", get_next_line(fd));
-// 	// printf("%s", get_next_line(fd));
-// 	// printf("%s", get_next_line(fd));
-// 	// printf("%s", get_next_line(fd));
-// 	// printf("%s", get_next_line(fd));
-// 	// printf("%s", get_next_line(fd));
-// 	close(fd);
-// 	return (0);
-// }
