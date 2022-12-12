@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eslamber <eslamber@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/02 11:43:03 by eslamber          #+#    #+#             */
-/*   Updated: 2022/12/09 09:5 by eslamber         ###   ########.fr       */
+/*   Created: 2022/12/12 13:27:03 by eslamber          #+#    #+#             */
+/*   Updated: 2022/12/12 13:31:41 by eslamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ static int	treat_buff(char **line, char *buff)
 
 char	*get_next_line(int fd)
 {
-	static char	buff[BUFFER_SIZE + 1];
+	static char	buff[OPEN_MAX][BUFFER_SIZE + 1];
 	char		*line;
 	ssize_t		read_ret;
 	int			flag;
@@ -117,18 +117,18 @@ char	*get_next_line(int fd)
 	line = malloc(sizeof(char));
 	if (!line)
 		return (NULL);
-	buff[BUFFER_SIZE] = 0;
+	buff[fd][BUFFER_SIZE] = 0;
 	line[0] = 0;
 	flag = 0;
-	if (buff[0] != 0)
-		flag = treat_buff(&line, buff);
+	if (buff[fd][0] != 0)
+		flag = treat_buff(&line, buff[fd]);
 	if (flag == 0)
 	{
-		read_ret = read(fd, buff, BUFFER_SIZE);
-		line = read_line(line, buff, read_ret, fd);
+		read_ret = read(fd, buff[fd], BUFFER_SIZE);
+		line = read_line(line, buff[fd], read_ret, fd);
 		if (line == NULL)
 			return (NULL);
-		line = treat(line, buff);
+		line = treat(line, buff[fd]);
 	}
 	return (line);
 }
