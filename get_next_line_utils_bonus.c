@@ -6,11 +6,11 @@
 /*   By: eslamber <eslamber@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 13:27:34 by eslamber          #+#    #+#             */
-/*   Updated: 2022/12/12 14:27:34 by eslamber         ###   ########.fr       */
+/*   Updated: 2022/12/16 23:41:07 by eslamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 static size_t	max(size_t x, size_t y)
 {

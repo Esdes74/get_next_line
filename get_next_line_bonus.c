@@ -6,12 +6,11 @@
 /*   By: eslamber <eslamber@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 13:27:03 by eslamber          #+#    #+#             */
-/*   Updated: 2022/12/12 14:27:24 by eslamber         ###   ########.fr       */
+/*   Updated: 2022/12/16 23:40:40 by eslamber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
-#include <fcntl.h>
+#include "get_next_line_bonus.h"
 
 static char	*ft_strjoin(char *dest, char *src)
 {
